@@ -7,7 +7,7 @@ import ExpenseList from "./components/ExpenseList";
 const initialExpenses = [
   { id: 1, charge: "rent", amount: 1600 },
   { id: 2, charge: "car payment", amount: 400 },
-  { id: 3, charge: "credit card bill", amount: 1200 },
+  { id: 3, charge: "credit card bill", amount: 1200 }
 ];
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
   const [alert, setAlert] = useState({
     show: false,
     type: "amount",
-    text: "",
+    text: ""
   });
 
   const [edit, setEdit] = useState(false);
@@ -26,27 +26,33 @@ function App() {
   const clearItems = () => {
     console.log("All Items are cleared");
     setExpenses([]);
+    handleAlert({ type: "success", text: "All items were deleted" });
   };
 
-  const handleEdit = (id) => {
-    const expenseEdit = expenses.find((item) => item.id === id);
-    console.log(expenseEdit);
+  const handleEdit = id => {
+    const expenseEdit = expenses.find(item => item.id === id);
+    const { charge, amount } = expenseEdit;
+    setAmount(amount);
+    setCharge(charge);
+    setEdit(true);
+    setId(id);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = id => {
     console.log("Item Deleted", id);
-    const singleDelete = expenses.filter((expense) => {
+    const singleDelete = expenses.filter(expense => {
       return expense.id !== id;
     });
     setExpenses(singleDelete);
+    handleAlert({ type: "success", text: "succesfully deleted the item" });
   };
 
-  const handleCharge = (e) => {
+  const handleCharge = e => {
     setCharge(e.target.value);
     console.log("charge", e.target.value);
   };
 
-  const handleAmount = (e) => {
+  const handleAmount = e => {
     setAmount(e.target.value);
     console.log("amount", e.target.value);
   };
@@ -58,7 +64,7 @@ function App() {
     }, 3000);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
 
     if (charge !== "" && amount > 0) {
@@ -67,7 +73,7 @@ function App() {
     } else {
       return handleAlert({
         type: "danger",
-        text: "Fields should not be emptied",
+        text: "Fields should not be emptied"
       });
     }
 
@@ -83,20 +89,8 @@ function App() {
       {alert.show && <Alert type={alert.type} text={alert.text} />}
       <h1>Budget Calculator</h1>
       <main className="App">
-        <ExpenseForm
-          charge={charge}
-          amount={amount}
-          handleAmount={handleAmount}
-          handleCharge={handleCharge}
-          handleSubmit={handleSubmit}
-          edit={edit}
-        />
-        <ExpenseList
-          expenses={expenses}
-          handleDelete={handleDelete}
-          handleEdit={handleEdit}
-          clearItems={clearItems}
-        />
+        <ExpenseForm charge={charge} amount={amount} handleAmount={handleAmount} handleCharge={handleCharge} handleSubmit={handleSubmit} edit={edit} />
+        <ExpenseList expenses={expenses} handleDelete={handleDelete} handleEdit={handleEdit} clearItems={clearItems} />
       </main>
       <h1>
         Total Spending:
